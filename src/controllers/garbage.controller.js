@@ -68,19 +68,11 @@ export const GarbageController = {
   //End region
   //Region add new Garbage
   createGarbage: async (req, res) => {
-    try {
-
-    //   const data = new Garbage({
-    //     url: req.body.url,
-    //     name: req.body.name ,
-    //     price : req.body.price,
-
-    //   });
-  
+    try {  
       await Garbage.create(req.body);
-      return res.status(200).json({ status: true, message: "Garbage created" });
+      return res.status(200).json({  success: true, message: "Garbage created" });
     } catch (error) {
-      res.status(400).json({ message: error.message });
+      res.status(500).json({ message: error.message });
     }
   },
   //End region
