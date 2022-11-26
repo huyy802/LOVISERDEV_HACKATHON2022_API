@@ -18,10 +18,21 @@ const user = new mongoose.Schema({
   gender: {
     type: String,
   },
-  orders: [{
-    type : mongoose.Schema.Types.ObjectId,
-    ref : 'order',
-  }]
+  orders: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "order",
+    },
+  ],
+  address: {
+    type: String,
+  },
+  point: {
+    type: Number,
+  },
+  money: {
+    type: Number,
+  },
 });
 const User = mongoose.model("user", user, "user");
 export default User;
