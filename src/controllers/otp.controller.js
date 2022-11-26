@@ -11,7 +11,8 @@ const SMSclient = new client(accountSid, authToken);
 export const OtpController = {
   sendOtp: async (req, res) => {
     try {
-      const user = User.findOne({ phoneNumber: req.params.phoneNumber });
+      const user = await User.findOne({ phoneNumber: req.body.phoneNumber });
+      console.log(user);
       if (user) {
         return res
           .status(202)
