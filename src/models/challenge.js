@@ -18,11 +18,11 @@ const challenge = new mongoose.Schema({
         type: String,
     },
     startTime: {  
-        type: Date,
+        type: Number,
         required: true,
     },
     endTime: {  
-        type: Date,
+        type: Number,
         required: true,
     },
     participants: [{
