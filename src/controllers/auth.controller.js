@@ -69,14 +69,8 @@ export const AuthController = {
   //Region add new user
   register: async (req, res) => {
     try {
-      const user = await User.findOne({ username: req.body.username });
-      console.log(user);
-      if (user) {
-        return res
-          .status(202)
-          .json({ success: false, message: "Username already exists" });
-      }
       const data = new User({
+        phoneNumber: req.body.phoneNumber,
         username: req.body.username,
         password: bcrypt.hashSync(req.body.password, 10),
       });
@@ -90,11 +84,11 @@ export const AuthController = {
   //Region login
   login: async (req, res) => {
     try {
-      const user = await User.findOne({ username: req.body.username });
+      const user = await User.findOne({ phoneNumber: req.body.phoneNumber });
       if (!user) {
         return res
           .status(202)
-          .json({ success: false, message: "Username does not exist" });
+          .json({ success: false, message: "Phone number does not exist" });
       }
       const isValidPassword = await bcrypt.compare(
         req.body.password,
@@ -106,14 +100,14 @@ export const AuthController = {
           .json({ success: false, message: "Password is incorrect" });
       }
       const accessToken = jwt.sign(
-        { username: req.body.username },
+        { phoneNumber: req.body.phoneNumber },
         process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: "10m" }
       );
 
       const refreshToken = jwt.sign(
         {
-          username: req.body.username,
+          phoneNumber: req.body.phoneNumber,
         },
         process.env.REFRESH_TOKEN_SECRET,
         { expiresIn: "7d" }
