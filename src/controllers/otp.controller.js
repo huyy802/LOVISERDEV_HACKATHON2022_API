@@ -18,8 +18,10 @@ export const OtpController = {
           .status(202)
           .json({ success: false, message: "Username already exists" });
       }
-      const otp = Math.floor(Math.random() * (999999 - 10000 + 1)) + 10000;
-      const data = new Otp({ otp: otp, phoneNumber: req.body.phoneNumber });
+      const { phoneNumber } = req.body;
+      console.log(req.body.phoneNumber);
+      const otp = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
+      const data = new Otp({ otp: otp, phoneNumber: phoneNumber });
       console.log(data);
 
       await data.save();
