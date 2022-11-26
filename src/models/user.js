@@ -21,6 +21,10 @@ const user = new mongoose.Schema({
   orders: [{
     type : mongoose.Schema.Types.ObjectId,
     ref : 'order',
+  }],
+  challenges: [{
+    type : mongoose.Schema.Types.ObjectId,
+    ref : 'challenge',
   }]
 });
 const User = mongoose.model("user", user, "user");
