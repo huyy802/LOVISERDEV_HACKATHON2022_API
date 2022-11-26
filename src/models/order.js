@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import User from "./user.js";
 
 const order = new mongoose.Schema({
   timeOrder: {  
@@ -17,7 +18,10 @@ const order = new mongoose.Schema({
     required: true,
     type: String,
   },
-  user : { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  user : { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'user' 
+  },
 });
 const Order = mongoose.model("order", order, "order");
 export default Order;
