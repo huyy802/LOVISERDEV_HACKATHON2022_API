@@ -25,6 +25,10 @@ const challenge = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    user_id: {
+        type : mongoose.Schema.Types.ObjectId,
+        required: true,
+    },
     participants: [{
         type : mongoose.Schema.Types.ObjectId,
         ref : 'user',
