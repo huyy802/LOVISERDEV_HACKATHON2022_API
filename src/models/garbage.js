@@ -2,18 +2,17 @@ import mongoose from "mongoose";
 
 const garbage = new mongoose.Schema({
   url: {
-    required: true,
     type: String,
   },
   name: {
     required: true,
     type: String,
   },
-  price:{
+  price: {
     required: true,
     type: Number,
   },
-  description:{
+  description: {
     type: String,
   },
 });
