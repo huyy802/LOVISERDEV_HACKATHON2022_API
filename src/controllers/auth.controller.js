@@ -20,12 +20,19 @@ export const AuthController = {
   },
 
   //GET An USER
-  getUser: async (req, res) => {
+  getUserData: async (req, res) => {
     try {
       const user = await User.findById(req.params.id);
       res.status(200).json({
         success: true,
-        message: user,
+        id: user._id,
+        username: user.username,
+        phoneNumber: user.phoneNumber,
+        gender: user.gender ?? "",
+        dateOfBirth: user.dateOfBirth ?? "",
+        address: user.address ?? "",
+        point: user.point ?? 0,
+        money: user.money ?? 0,
       });
     } catch (error) {
       res.status(500).json({
@@ -120,8 +127,11 @@ export const AuthController = {
         id: user._id,
         username: user.username,
         phoneNumber: user.phoneNumber,
-        gender: user.gender,
+        gender: user.gender ?? "",
         dateOfBirth: user.dateOfBirth ?? "",
+        address: user.address ?? "",
+        point: user.point ?? 0,
+        money: user.money ?? 0,
       });
     } catch (error) {
       res.status(500).json({ success: false, message: error.message });
