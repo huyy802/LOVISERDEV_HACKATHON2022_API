@@ -106,26 +106,16 @@ export const ChallengeController = {
   leave: async (req, res) => {
     try {  
       console.log(req.params.id + " " + req.body.userId);
-      const c = await ChallengeModel.updateMany(
-        {participants: req.params.id}, 
-        {$pull : {participants: req.params.id}
-      }
-      );
 
-      await ChallengeModel.update( { "participants" : "maths" }, { $pull: { "participants": "maths" }} );
-      const challenge = await ChallengeModel.findByIdAndUpdate(req.params.id,{
-
-      })
-      console.log(c);
-      // await ChallengeModel.updateOne(
-      //   { _id: req.params.id },
-      //   { $pull: { participants : { _id: req.body.userId } } }
-      // );
-
-      // await User.updateOne(
-      //   { _id: req.body.userId },
-      //   { $pull: { challenges: { _id: req.params.id } } }
-      // );
+      await ChallengeModel.update(
+         { _id : req.params.id }, 
+         { $pull: { participants: req.body.userId }
+      } );
+      
+      await User.update(
+        { _id : req.body.userId }, 
+        { $pull: { challenges: req.params.id }
+     } );
   
       return res.status(200).json({  success: true, message: "Leave Challenge" });
     } catch (error) {
