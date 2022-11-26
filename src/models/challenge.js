@@ -28,6 +28,9 @@ const challenge = new mongoose.Schema({
     participants: [{
         type : mongoose.Schema.Types.ObjectId,
         ref : 'user',
+    }],
+    images: [{
+        type: String,
     }]
 });
 const Challenge = mongoose.model("challenge", challenge, "challenge");
