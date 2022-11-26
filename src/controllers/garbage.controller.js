@@ -7,10 +7,10 @@ export const GarbageController = {
     try {
       const garbage = await Garbage.find();
       console.log(garbage);
-      res.status(200).json({
-        success: true,
-        message: garbage,
-      });
+      res.status(200).json(
+        
+         garbage,
+    );
     } catch (error) {
       res.status(500).json({
         success: false,
