@@ -1,6 +1,7 @@
 import client from "twilio";
 import dotenv from "dotenv";
 import Otp from "../models/otp.js";
+import User from "../models/user.js";
 dotenv.config();
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
@@ -10,9 +11,15 @@ const SMSclient = new client(accountSid, authToken);
 export const OtpController = {
   sendOtp: async (req, res) => {
     try {
+      const user = User.findOne({ phoneNumber: req.params.phoneNumber });
+      if (user) {
+        return res
+          .status(202)
+          .json({ success: false, message: "Phone number already exists" });
+      }
       console.log("zo");
       const { phoneNumber } = req.body;
-      const otp = Math.floor(1000 + Math.random() * 9000);
+      const otp = Math.floor(Math.random() * (900000 - 100000 + 1)) + 100000;
       const data = new Otp({ otp: otp, phoneNumber: phoneNumber });
       console.log(data);
 
