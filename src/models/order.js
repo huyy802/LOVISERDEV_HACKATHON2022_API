@@ -3,7 +3,7 @@ import User from "./user.js";
 
 const order = new mongoose.Schema({
   timeOrder: {  
-    type: Date,
+    type: Number,
     required: true,
   },
   status: {
