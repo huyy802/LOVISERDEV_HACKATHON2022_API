@@ -1,6 +1,6 @@
 import User from "../models/user.js";
-import validator from "validator";
 import bcrypt from "bcrypt";
+import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 export const AuthController = {
   //Region get all user
@@ -67,30 +67,21 @@ export const AuthController = {
 
   //End region
   //Region add new user
-  createUser: async (req, res) => {
+  register: async (req, res) => {
     try {
       const user = await User.findOne({ username: req.body.username });
+      console.log(user);
       if (user) {
         return res
-          .status(400)
+          .status(202)
           .json({ success: false, message: "Username already exists" });
       }
-      const isValidPassword = validator.isLength(req.body.password, 8, 30);
-      if (!isValidPassword) {
-        return res.status(400).json({
-          success: false,
-          message: "Password must be 8-30 characters",
-        });
-      }
-
       const data = new User({
         username: req.body.username,
         password: bcrypt.hashSync(req.body.password, 10),
       });
-      // const dataToSave = await data.save();
-      // res.status(200).json(dataToSave);
       await User.create(data);
-      return res.status(200).json({ status: true, message: "User created" });
+      return res.status(200).json({ success: true, message: "User created" });
     } catch (error) {
       res.status(400).json({ message: error.message });
     }
@@ -102,7 +93,7 @@ export const AuthController = {
       const user = await User.findOne({ username: req.body.username });
       if (!user) {
         return res
-          .status(400)
+          .status(202)
           .json({ success: false, message: "Username does not exist" });
       }
       const isValidPassword = await bcrypt.compare(
@@ -111,13 +102,60 @@ export const AuthController = {
       );
       if (!isValidPassword) {
         return res
-          .status(400)
+          .status(202)
           .json({ success: false, message: "Password is incorrect" });
       }
-      return res.status(200).json({ success: true, message: "Login success" });
+      return res.status(200).json({
+        success: true,
+        message: "Login success",
+        data: {
+          id: user._id,
+          username: user.username,
+          phoneNumber: user.phoneNumber,
+          gender: user.gender,
+          dateOfBirth: user.dateOfBirth ?? "",
+        },
+      });
     } catch (error) {
-      res.status(400).json({ message: error.message });
+      res.status(500).json({ success: false, message: error.message });
     }
   },
+  changePassword: async (req, res) => {
+    try {
+      if (mongoose.Types.ObjectId.isValid(req.params.id)) {
+        const user = await User.findById(req.params.id);
+        if (!user) {
+          return res
+            .status(202)
+            .json({ success: false, message: "User doesn't exists" });
+        }
+
+        const isMatchPassword = await bcrypt.compare(
+          req.body.oldPassword,
+          user.password
+        );
+        if (!isMatchPassword) {
+          return res.status(202).json({
+            success: false,
+            message: "Incorrect password",
+          });
+        }
+
+        await user.updateOne({
+          $set: { password: bcrypt.hashSync(req.body.password, 10) },
+        });
+
+        return res
+          .status(200)
+          .json({ success: true, message: "Change password success" });
+      }
+      return res
+        .status(202)
+        .json({ success: false, message: "User doesn't exists" });
+    } catch (error) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  },
+
   //End region
 };

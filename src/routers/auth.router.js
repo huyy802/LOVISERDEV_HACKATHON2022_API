@@ -4,7 +4,7 @@ const router = express.Router();
 import { AuthController } from "../controllers/auth.controller.js";
 
 //CREATE USER
-router.post("/createUser", AuthController.createUser);
+router.post("/register", AuthController.register);
 
 router.post("/login", AuthController.login);
 
@@ -16,8 +16,7 @@ router.get("/getUser/:id", AuthController.getUser);
 
 //UPDATE AN USER
 router.put("/updateUser/:id", AuthController.updateUser);
-
 //DELETE AN USER
 router.delete("deleteUser/:id", AuthController.deleteUser);
-
+router.put("/changePassword/:id", AuthController.changePassword);
 export default router;
