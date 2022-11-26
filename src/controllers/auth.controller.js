@@ -105,6 +105,21 @@ export const AuthController = {
           .status(202)
           .json({ success: false, message: "Password is incorrect" });
       }
+      const accessToken = jwt.sign(
+        { username: req.body.username },
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: "10m" }
+      );
+
+      const refreshToken = jwt.sign(
+        {
+          username: req.body.username,
+        },
+        process.env.REFRESH_TOKEN_SECRET,
+        { expiresIn: "7d" }
+      );
+      res.setHeader("Access-Token", accessToken);
+      res.setHeader("Refresh-Token", refreshToken);
       return res.status(200).json({
         success: true,
         message: "Login success",
