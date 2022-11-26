@@ -28,12 +28,14 @@ app.use(cors());
 import authRouter from "./routers/auth.router.js";
 import otpRouter from "./routers/otp.router.js";
 import garbageRouter from "./routers/garbage.router.js";
+import orderRouter from "./routers/order.router.js";
 //#end region
 
 //#region setup router
 app.use("/api/auth", authRouter);
 app.use("/api/otp", otpRouter);
 app.use("/api/garbage", garbageRouter);
+app.use("/api/order",orderRouter);
 //#end region
 
 //#region connect to database
