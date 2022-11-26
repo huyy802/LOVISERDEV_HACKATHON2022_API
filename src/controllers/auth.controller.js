@@ -117,13 +117,11 @@ export const AuthController = {
       return res.status(200).json({
         success: true,
         message: "Login success",
-        data: {
-          id: user._id,
-          username: user.username,
-          phoneNumber: user.phoneNumber,
-          gender: user.gender,
-          dateOfBirth: user.dateOfBirth ?? "",
-        },
+        id: user._id,
+        username: user.username,
+        phoneNumber: user.phoneNumber,
+        gender: user.gender,
+        dateOfBirth: user.dateOfBirth ?? "",
       });
     } catch (error) {
       res.status(500).json({ success: false, message: error.message });
