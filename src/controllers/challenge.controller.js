@@ -72,18 +72,8 @@ export const ChallengeController = {
   //Region add new Challenge
   create: async (req, res) => {
     try {  
-      const Challenge = await ChallengeModel.create(req.body);
-      //console.log(await Challenge.populate('user'));
-
-      const user = await User.findById(req.body.user);
-      user.Challenges.push(Challenge._id);
-
-     // console.log(user);
-
-      await user.save();
-
-      //console.log(await user.populate('Challenges'));
-   
+      await ChallengeModel.create(req.body);
+  
       return res.status(200).json({  success: true, message: "Challenge created" });
     } catch (error) {
       res.status(500).json({ message: error.message });
@@ -91,17 +81,96 @@ export const ChallengeController = {
   },
   //End region
   
-  //Region get Challenges of user
+  //Region join Challenge
+  join: async (req, res) => {
+    try {  
+      const challenge = await ChallengeModel.findById(req.params.id);
+      challenge.participants.push(req.body.userId);
+
+      await challenge.save();
+
+      const user = await User.findById(req.body.userId);
+      user.challenges.push(req.params.id);
+      
+
+      await user.save();
+  
+      return res.status(200).json({  success: true, message: "Join Challenge" });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+  //End region
+
+  //Region leave Challenge
+  leave: async (req, res) => {
+    try {  
+      console.log(req.params.id + " " + req.body.userId);
+      const c = await ChallengeModel.updateMany(
+        {participants: req.params.id}, 
+        {$pull : {participants: req.params.id}
+      }
+      );
+
+      await ChallengeModel.update( { "participants" : "maths" }, { $pull: { "participants": "maths" }} );
+      const challenge = await ChallengeModel.findByIdAndUpdate(req.params.id,{
+
+      })
+      console.log(c);
+      // await ChallengeModel.updateOne(
+      //   { _id: req.params.id },
+      //   { $pull: { participants : { _id: req.body.userId } } }
+      // );
+
+      // await User.updateOne(
+      //   { _id: req.body.userId },
+      //   { $pull: { challenges: { _id: req.params.id } } }
+      // );
+  
+      return res.status(200).json({  success: true, message: "Leave Challenge" });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+  //End region
+
   getParticipantsOfChallenge: async (req, res) => {
     try {  
- 
-      const user = await User.findById(req.params.id);
-    
-      const user_with_Challenges = await user.populate('Challenges')
+      console.log("aaaa");
+
+      const challenge = await ChallengeModel.findById(req.params.id);
+      
+      
+
+      const challege_with_participants = await challenge.populate('participants');
+      
+      console.log(challege_with_participants);
       
       return res.status(200).json({  
         success: true, 
-        message: user_with_Challenges.Challenges 
+        message: challege_with_participants.participants
+      });
+
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+  //end region
+
+  //Region get Challenges of user
+  getWithUser: async (req, res) => {
+    try {  
+
+      const user = await User.findById(req.params.id);
+      
+
+      const user_with_challenge = await user.populate('challenges');
+      
+      console.log(user_with_challenge);
+      
+      return res.status(200).json({  
+        success: true, 
+        message: user_with_challenge.challenges,
       });
 
     } catch (error) {
