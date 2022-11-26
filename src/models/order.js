@@ -2,7 +2,11 @@ import mongoose from "mongoose";
 import User from "./user.js";
 
 const order = new mongoose.Schema({
-  timeOrder: {  
+  startDate: {  
+    type: Number,
+    required: true,
+  },
+  endDate :{  
     type: Number,
     required: true,
   },
