@@ -12,6 +12,10 @@ const garbage = new mongoose.Schema({
     required: true,
     type: Number,
   },
+  type: {
+    required: true,
+    type: String,
+  },
   description: {
     type: String,
   },
