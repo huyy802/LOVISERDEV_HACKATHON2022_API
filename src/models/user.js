@@ -9,6 +9,15 @@ const user = new mongoose.Schema({
     required: true,
     type: String,
   },
+  phoneNumber: {
+    type: String,
+  },
+  dateOfBirth: {
+    type: Date,
+  },
+  gender: {
+    type: String,
+  },
 });
 const User = mongoose.model("user", user, "user");
 export default User;
