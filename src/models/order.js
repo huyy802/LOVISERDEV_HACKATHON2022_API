@@ -23,5 +23,6 @@ const order = new mongoose.Schema({
     ref: 'user' 
   },
 });
+
 const Order = mongoose.model("order", order, "order");
 export default Order;

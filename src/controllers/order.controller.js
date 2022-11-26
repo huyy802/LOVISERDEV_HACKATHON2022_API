@@ -41,7 +41,38 @@ export const OrderController = {
   //DELETE
   delete: async (req, res) => {
     try {
+      const order = await OrderModel.findById(req.params.id);
+
+      const order_with_user = await order.populate('user');
+
+      console.log(order);
+      console.log(order_with_user);
+
+      // const user = await User.findById(order_with_user.user._id);
+
+      // console.log(user);
+
+      // await user.update(
+      //   {},
+      //   { $pull: { orders: { _id: order._id } } }
+      // );
+
+      // await user.save();
+
+      // await User.updateMany(
+      //   {orders: order_with_user.user._id}, 
+      //   {$pull : {orders: order_with_user.user._id}
+      // }
+      // );
+
+      // order.remove();
+
+      // await order.save();
+
       await OrderModel.findByIdAndDelete(req.params.id);
+      
+
+  
       res.status(200).json({
         success: true,
         message: OrderModel,
@@ -99,6 +130,8 @@ export const OrderController = {
     
       const user_with_orders = await user.populate('orders')
       
+      console.log(user_with_orders);
+
       return res.status(200).json({  
         success: true, 
         message: user_with_orders.orders 
