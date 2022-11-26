@@ -69,8 +69,14 @@ export const AuthController = {
   //Region add new user
   register: async (req, res) => {
     try {
+      const user = await User.findOne({ username: req.body.username });
+      console.log(user);
+      if (user) {
+        return res
+          .status(202)
+          .json({ success: false, message: "Username already exists" });
+      }
       const data = new User({
-        phoneNumber: req.body.phoneNumber,
         username: req.body.username,
         password: bcrypt.hashSync(req.body.password, 10),
       });
@@ -84,7 +90,7 @@ export const AuthController = {
   //Region login
   login: async (req, res) => {
     try {
-      const user = await User.findOne({ phoneNumber: req.body.phoneNumber });
+      const user = await User.findOne({ username: req.body.username });
       if (!user) {
         return res
           .status(202)
@@ -100,14 +106,14 @@ export const AuthController = {
           .json({ success: false, message: "Password is incorrect" });
       }
       const accessToken = jwt.sign(
-        { username: req.body.phoneNumber },
+        { username: req.body.username },
         process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: "10m" }
       );
 
       const refreshToken = jwt.sign(
         {
-          username: req.body.phoneNumber,
+          username: req.body.username,
         },
         process.env.REFRESH_TOKEN_SECRET,
         { expiresIn: "7d" }
@@ -119,8 +125,8 @@ export const AuthController = {
         message: "Login success",
         data: {
           id: user._id,
-          phoneNumber: user.phoneNumber,
           username: user.username,
+          phoneNumber: user.phoneNumber,
           gender: user.gender,
           dateOfBirth: user.dateOfBirth ?? "",
         },

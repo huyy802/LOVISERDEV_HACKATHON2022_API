@@ -1,25 +1,14 @@
 import OrderModel from "../models/order.js";
+import User from "../models/user.js";
 
 export const OrderController = {
   //Region get all Order
   getAll: async (req, res) => {
     try {
-      console.log(req.body);
-      const Order = await OrderModel.find(req.body);
-      //    const Order = await OrderModel.aggregate([
-      //     {
-      //       $project: {
-      //         "date": {
-      //           "$dateToString": {
-      //             "format": "%m/%d/%Y %H:%M:%S",
-      //             "date": "$timeOrder",
-      //             "timezone": "GMT"
-      //           }
-      //         }
-      //       }
-      //     }
-      //   ])
-
+     console.log(req.body);
+      const Order = await OrderModel
+       .find(req.body)
+            
       console.log(Order);
       res.status(200).json({
         success: true,
@@ -82,12 +71,42 @@ export const OrderController = {
   //End region
   //Region add new Order
   create: async (req, res) => {
-    try {
-      await OrderModel.create(req.body);
-      return res.status(200).json({ success: true, message: "Order created" });
+    try {  
+      const order = await OrderModel.create(req.body);
+      //console.log(await order.populate('user'));
+
+      const user = await User.findById(req.body.user);
+      user.orders.push(order._id);
+
+     // console.log(user);
+
+      await user.save();
+
+      //console.log(await user.populate('orders'));
+   
+      return res.status(200).json({  success: true, message: "Order created" });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
   },
   //End region
+  
+  //Region get orders of user
+  getOrdersOfUser: async (req, res) => {
+    try {  
+ 
+      const user = await User.findById(req.params.id);
+    
+      const user_with_orders = await user.populate('orders')
+      
+      return res.status(200).json({  
+        success: true, 
+        message: user_with_orders.orders 
+      });
+
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+  //end region
 };

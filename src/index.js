@@ -35,7 +35,7 @@ import orderRouter from "./routers/order.router.js";
 app.use("/api/auth", authRouter);
 app.use("/api/otp", otpRouter);
 app.use("/api/garbage", garbageRouter);
-app.use("/api/order", orderRouter);
+app.use("/api/order",orderRouter);
 //#end region
 
 //#region connect to database
@@ -47,8 +47,8 @@ mongoose
   .then(() => {
     console.log("Connected to MongoDB!!!");
   })
-  .catch((err) => {
-    console.log(err);
+  .catch(() => {
+    console.log("Error connecting to MongoDB");
   });
 //#end region
 

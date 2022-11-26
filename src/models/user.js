@@ -18,6 +18,10 @@ const user = new mongoose.Schema({
   gender: {
     type: String,
   },
+  orders: [{
+    type : mongoose.Schema.Types.ObjectId,
+    ref : 'order',
+  }]
 });
 const User = mongoose.model("user", user, "user");
 export default User;
