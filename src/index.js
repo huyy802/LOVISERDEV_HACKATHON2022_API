@@ -26,11 +26,12 @@ app.use(cors());
 
 //#region import router
 import authRouter from "./routers/auth.router.js";
+import otpRouter from "./routers/otp.router.js";
 //#end region
 
 //#region setup router
 app.use("/api/auth", authRouter);
-
+app.use("/api/otp", otpRouter);
 //#end region
 
 //#region connect to database
