@@ -1,6 +1,9 @@
 import mongoose from "mongoose";
 
 const challenge = new mongoose.Schema({
+    imageUrl : {
+        type: String,
+    },
     title: {
         required: true,
         type: String,

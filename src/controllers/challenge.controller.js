@@ -10,10 +10,9 @@ export const ChallengeController = {
        .find(req.body)
             
       console.log(Challenge);
-      res.status(200).json({
-        success: true,
-        message: Challenge,
-      });
+      res.status(200).json(
+           Challenge,
+      );
     } catch (error) {
       res.status(500).json({
         success: false,
